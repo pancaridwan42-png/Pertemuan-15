@@ -10,19 +10,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -31,22 +26,17 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Relasi ke model Order (One to Many)
-     */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
     }
 
-    // Relasi One-to-One ke model Profile
-    public function profile()
+    public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
     }
 
-    // Relasi One-to-Many ke model Article
-    public function articles()
+    public function articles(): HasMany
     {
         return $this->hasMany(Article::class);
     }

@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -41,7 +42,7 @@ class ArticleController extends Controller
             ],
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
         ], [
             'title.required' => 'Judul artikel wajib diisi.',
             'title.min' => 'Judul artikel minimal 10 karakter.',
@@ -85,7 +86,7 @@ class ArticleController extends Controller
             ],
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
         ], [
             'title.required' => 'Judul artikel wajib diisi.',
             'title.min' => 'Judul artikel minimal 10 karakter.',
@@ -102,6 +103,9 @@ class ArticleController extends Controller
         ];
 
         if ($request->hasFile('image')) {
+            if ($article->image) {
+                Storage::disk('public')->delete($article->image);
+            }
             $data['image'] = $request->file('image')->store('articles', 'public');
         }
 
@@ -112,6 +116,9 @@ class ArticleController extends Controller
 
     public function destroy(Article $article): RedirectResponse
     {
+        if ($article->image) {
+            Storage::disk('public')->delete($article->image);
+        }
         $article->delete();
         return redirect()->route('articles.index')->with('success', 'Artikel berhasil dihapus!');
     }

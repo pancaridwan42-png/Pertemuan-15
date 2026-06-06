@@ -3,21 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
     protected $fillable = ['name', 'slug'];
 
-    // Relasi One-to-Many ke model Article
-    public function articles()
+    public function articles(): HasMany
     {
         return $this->hasMany(Article::class);
     }
 
-    /**
-     * Relasi ke model Product (One to Many)
-     */
-    public function products()
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }

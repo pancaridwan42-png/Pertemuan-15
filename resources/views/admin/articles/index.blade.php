@@ -54,6 +54,9 @@
                             <td>{{ $article->category->name }}</td>
                             <td>{{ $article->user->name }}</td>
                             <td>
+                                <a href="{{ route('frontend.articles.show', $article->slug) }}" class="btn btn-info btn-sm" target="_blank">
+                    <i class="fas fa-eye"></i> Lihat
+                </a>
                                 <a href="{{ route('articles.edit', $article->id) }}" class="btn btn-warning btn-sm">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
